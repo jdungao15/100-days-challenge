@@ -28,14 +28,13 @@ while game_is_on:
     # check if player collide with car
     for car in car_manager.all_cars:
         if car.distance(player) < 20:
-            pass
             game_is_on = False
+            scoreboard.game_over()
 
     # check if player reached the top
     if player.ycor() > 280:
         player.reset_position()
         scoreboard.update_scoreboard()
         car_manager.increase_speed()
-        print(car_manager.speed)
 
 screen.exitonclick()

@@ -13,16 +13,24 @@
 
 import pandas as pd
 
-data = pd.read_csv("weather_data.csv")
+# data = pd.read_csv("weather_data.csv")
+#
+# data_dict = data.to_dict()
+# temp_list = data["temp"].to_list()
+# max_temp = data["temp"].max()
+#
+# # Get Data in Row
+# print(data[data.day == "Monday"])
+# print(data[data.temp == data.temp.max()])
+#
+# monday = data[data.day == "Monday"]
+# monday_temp = (monday.temp * 1.8) + 32
+# print(monday_temp)
 
-data_dict = data.to_dict()
-temp_list = data["temp"].to_list()
-max_temp = data["temp"].max()
-
-# Get Data in Row
-print(data[data.day == "Monday"])
-print(data[data.temp == data.temp.max()])
-
-monday = data[data.day == "Monday"]
-monday_temp = (monday.temp * 1.8) + 32
-print(monday_temp)
+#Create dataframe from scratch
+data_dict = {
+    "students": ["Amy", "James", "Angela"],
+    "scores": [76, 56, 65]
+}
+data = pd.DataFrame(data_dict)
+data.to_csv("new_data.csv")

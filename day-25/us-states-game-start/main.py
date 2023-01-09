@@ -42,7 +42,6 @@ while len(guessed_state) < 50:
         name_writer.write(f"{answer_state}", move=True, font=FONT)
         score += 1
     print(guessed_state)
-    print(missing_states)
 
 
 

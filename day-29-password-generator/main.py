@@ -1,14 +1,16 @@
 from tkinter import *
+from tkinter import messagebox
 import string
 import random
+import pyperclip
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 alphabet_and_char = list(string.ascii_lowercase + string.ascii_uppercase + string.punctuation)
-
 def generate_password():
     password = ""
     password_entry.delete(0, END)
-    for i in range(10):
+    for i in range(15):
         password += random.choice(alphabet_and_char)
+    password = [char for char in alphabet_and_char ]
     password_entry.insert(0, password)
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
@@ -18,16 +20,24 @@ def save_password():
     password = password_entry.get()
     email = username_entry.get()
 
-    with open('data.txt', 'a') as password_file:
-        password_file.write(f"{website} | {email} | {password} \n")
-
-    password_entry.delete(0, END)
-    website_entry.delete(0, END)
+    #check if entry field is empty
+    if website == "" or password == "" or email == "":
+        messagebox.showerror("Error", "Please fill in all the fields")
+    else:
+        is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered: \n Email: {email} "
+                                                      f"\n Password: {password} \n is it okay to save?")
+        if is_ok:
+            with open('data.txt', 'a') as password_file:
+                password_file.write(f"{website} | {email} | {password} \n")
+            password_entry.delete(0, END)
+            website_entry.delete(0, END)
+    pyperclip.copy(f"{website} | {email} | {password}")
 
 # ---------------------------- UI SETUP ---------- --------------------- #
 window = Tk()
 window.title('Password Manager')
 window.config(padx=50, pady=50)
+
 
 # Password Manager Logo
 
@@ -64,5 +74,8 @@ generate_button.grid(row=3, column=2)
 
 add_button = Button(text='Add', width=36, command=save_password)
 add_button.grid(row=4, column=1, columnspan=2, sticky='EW')
+
+#copy to clipboard
+
 
 window.mainloop()

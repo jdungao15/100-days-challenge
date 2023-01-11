@@ -1,7 +1,15 @@
 from tkinter import *
-
-
+import string
+import random
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+alphabet_and_char = list(string.ascii_lowercase + string.ascii_uppercase + string.punctuation)
+
+def generate_password():
+    password = ""
+    password_entry.delete(0, END)
+    for i in range(10):
+        password += random.choice(alphabet_and_char)
+    password_entry.insert(0, password)
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
@@ -51,7 +59,7 @@ password_entry = Entry(width=21)
 password_entry.grid(row=3, column=1, sticky='EW')
 
 # Buttons
-generate_button = Button(text='Generate Password')
+generate_button = Button(text='Generate Password', command=generate_password)
 generate_button.grid(row=3, column=2)
 
 add_button = Button(text='Add', width=36, command=save_password)

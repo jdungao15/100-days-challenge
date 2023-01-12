@@ -6,24 +6,32 @@ BACKGROUND_COLOR = "#B1DDC6"
 # -----------------DATA----------------
 df = pd.read_csv("./data/french_words.csv")
 french_data = df.to_dict(orient='records')
+current_card ={}
 
-
-def random_word():
-    french_word = random.choice(french_data)
-    print(french_word)
-    random_french_word = french_word['French']
-    card.itemconfigure(card_title, text='French')
-    card.itemconfig(card_word, text=random_french_word)
+def next_card():
+    global current_card, flip_timer
+    window.after_cancel(flip_timer)
+    current_card = random.choice(french_data)
+    random_french_word = current_card['French']
+    card.itemconfigure(card_title, text='French', fill='black')
+    card.itemconfig(card_word, text=random_french_word, fill='black')
+    card.itemconfig(card_image, image=card_front_img)
+    flip_timer= window.after(3000, flip_card)
 
 
 def flip_card():
+    card.itemconfig(card_title, text='English', fill='white')
+    card.itemconfig(card_word, text=current_card['English'], fill='white')
     card.itemconfig(card_image, image=card_back_img)
+
 
 
 # -------------------UI SETUP --------------------------------
 window = Tk()
 window.title("Flash Card")
 window.config(padx=50, pady=50, bg=BACKGROUND_COLOR)
+
+flip_timer = window.after(3000, flip_card)
 
 card_front_img = PhotoImage(file='./images/card_front.png')
 card_back_img = PhotoImage(file='./images/card_back.png')
@@ -40,13 +48,15 @@ card_word = card.create_text(400, 263, text='Word', font=('Arial', 60, 'bold'))
 # Button
 correct_img = PhotoImage(file='./images/right.png')
 correct_button = Button(image=correct_img, highlightthickness=0, borderwidth=0, bg=BACKGROUND_COLOR,
-                        command=random_word, cursor='hand2')
+                        command=next_card, cursor='hand2')
 correct_button.grid(row=1, column=0)
 
 wrong_img = PhotoImage(file='./images/wrong.png')
-wrong_button = Button(image=wrong_img, highlightthickness=0, borderwidth=0, bg=BACKGROUND_COLOR, command=flip_card,
+wrong_button = Button(image=wrong_img, highlightthickness=0, borderwidth=0, bg=BACKGROUND_COLOR, command=next_card,
                       cursor='hand2')
 wrong_button.grid(row=1, column=1)
+
+next_card()
 
 
 

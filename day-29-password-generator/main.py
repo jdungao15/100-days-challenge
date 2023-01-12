@@ -10,7 +10,7 @@ import json
 def find_password():
     user_email = username_entry.get()
     user_website = website_entry.get()
-    # Check if data exist
+    # Check if data exists
     try:
         with open('data.json', 'r') as json_file:
             data = json.load(json_file)

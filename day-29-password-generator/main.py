@@ -24,8 +24,6 @@ def find_password():
             messagebox.showerror("Error", "No details for the website exists")
         else:
 
-
-
             # check if email exist
             if user_email not in user_data.values():
                 messagebox.showerror("Error", "Email Not Found")

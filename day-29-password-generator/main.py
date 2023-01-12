@@ -8,6 +8,8 @@ import json
 
 # Search Functionality
 def find_password():
+    user_email = username_entry.get()
+    user_website = website_entry.get()
     # Check if data exist
     try:
         with open('data.json', 'r') as json_file:
@@ -22,8 +24,7 @@ def find_password():
             messagebox.showerror("Error", "No details for the website exists")
         else:
 
-            user_email = username_entry.get()
-            user_website = website_entry.get()
+
 
             # check if email exist
             if user_email not in user_data.values():

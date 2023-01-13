@@ -2,6 +2,7 @@ from question_model import Question
 from data import question_data
 from quiz_brain import QuizBrain
 import requests
+from ui import  QuizInterface
 
 response = requests.get('https://opentdb.com/api.php?amount=10&category=18&type=boolean')
 response.raise_for_status()
@@ -17,9 +18,10 @@ for question in data:
 
 
 quiz = QuizBrain(question_bank)
+quiz_ui= QuizInterface()
 
-while quiz.still_has_questions():
-    quiz.next_question()
+# while quiz.still_has_questions():
+#     quiz.next_question()
 
 print("You've completed the quiz")
 # print(f"Your final score was: {quiz.score}/{quiz.question_number}")

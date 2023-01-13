@@ -16,9 +16,10 @@ for name in names:
 
 with open("./input/letters/starting_letter.txt", "r") as letter:
     letter_t = letter.readlines()
-letter_template = ''.join(letter_t)
+    print(letter_t)
+# letter_template = ''.join(letter_t)
 
-for name in stripped_names:
-    with open(f"./Output/ReadyToSend/letter_for_{name}.txt", "w") as letter:
-        letter.write(letter_template.replace("[name]", name))
-print(letter_template)
+# for name in stripped_names:
+#     with open(f"./Output/ReadyToSend/letter_for_{name}.txt", "w") as letter:
+#         letter.write(letter_template.replace("[name]", name))
+# print(letter_template)

@@ -22,7 +22,7 @@ import pandas as pd
 # # Get Data in Row
 # print(data[data.day == "Monday"])
 # print(data[data.temp == data.temp.max()])
-#
+#w
 # monday = data[data.day == "Monday"]
 # monday_temp = (monday.temp * 1.8) + 32
 # print(monday_temp)

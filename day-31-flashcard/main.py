@@ -3,7 +3,7 @@ import pandas as pd
 import random
 
 BACKGROUND_COLOR = "#B1DDC6"
-current_card ={}
+current_card = {}
 to_learn = {}
 # -----------------DATA----------------
 try:
@@ -15,9 +15,6 @@ else:
     to_learn = df.to_dict(orient='records')
 
 
-
-
-
 def next_card():
     global current_card, flip_timer
     window.after_cancel(flip_timer)
@@ -26,7 +23,7 @@ def next_card():
     card.itemconfigure(card_title, text='Tagalog', fill='black')
     card.itemconfig(card_word, text=random_tagalog_word, fill='black')
     card.itemconfig(card_image, image=card_front_img)
-    flip_timer= window.after(3000, flip_card)
+    flip_timer = window.after(3000, flip_card)
 
 
 def flip_card():
@@ -34,11 +31,13 @@ def flip_card():
     card.itemconfig(card_word, text=current_card['English'], fill='white')
     card.itemconfig(card_image, image=card_back_img)
 
+
 def is_known():
     to_learn.remove(current_card)
     data = pd.DataFrame(to_learn)
     data.to_csv("./data/words_to_learn.csv", index=False)
     next_card()
+
 
 # -------------------UI SETUP --------------------------------
 window = Tk()
@@ -71,7 +70,5 @@ unknown_button = Button(image=wrong_img, highlightthickness=0, borderwidth=0, bg
 unknown_button.grid(row=1, column=0)
 
 next_card()
-
-
 
 window.mainloop()

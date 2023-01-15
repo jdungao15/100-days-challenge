@@ -38,7 +38,7 @@ def get_percentage_change():
 
 def get_news():
     newsapi = NewsApiClient(api_key=NEWS_API_KEY)
-    top_headlines = newsapi.get_top_headlines(q=COMPANY_NAME,
+    top_headlines = newsapi.get_everything(q=COMPANY_NAME,
                                               sources='bloomberg',
                                               language='en')
     return top_headlines
@@ -57,7 +57,7 @@ def send_message(percentage_sign: str):
             .create(
             body=message_body,
             from_='+13204411296',
-            to='+15513198155')
+            to='+12017473359')
     print(message.status)
 
 

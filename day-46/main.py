@@ -2,10 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import os
 import pprint as pp
 
-CLIENT_ID = 'bba42b14b05144eabb2b4d61017235ba'
-CLIENT_SECRET = '64c1c57b9a2448918f2def22591f13b5'
+CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
+CLIENT_SECRET = os.environ.get('SPOTIPY_CLIENT_SECRET')
+REDIRECT_URI = os.environ.get('SPOTIPY_REDIRECT_URI')
+
 
 user_input = input('Which year do you want to travel to? Type the date in this format YYYY-MM-DD: ')
 URL = f"https://www.billboard.com/charts/hot-100/{user_input}"
@@ -22,7 +25,7 @@ song_title_list = [song.text.strip() for song in songs_tag]
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
     client_id=CLIENT_ID,
     client_secret=CLIENT_SECRET,
-    redirect_uri="https://example.com/",
+    redirect_uri=REDIRECT_URI,
     cache_path=".cache",
     scope="playlist-modify"))
 

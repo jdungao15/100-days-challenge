@@ -21,35 +21,37 @@ language_en = driver.find_element(By.ID, "langSelect-EN")
 language_en.click()
 cookie = driver.find_element(By.ID, "bigCookie")
 # Get cookies amount
-cookies_amount = float(driver.find_element(By.ID, "cookies").text[0])
-
-
 
 
 # store all product in a list
 
-for i in range(2):
+product_store = []
+
+for i in range(19):
     try:
-        product = driver.find_element(By.ID, f"productPrice{i}")
-        upgrade_items.append(product)
+        product = driver.find_element(By.ID, f"product{i}")
+        product_store.append(product)
     except NoSuchElementException:
-        continue
+        product = driver.find_element(By.ID, f"product{i}")
 
-upgrade_items.reverse()
+product_store.reverse()
+while True:
+    cookies_text = driver.find_element(By.ID, "cookies").text.split("per second: ")[0]
+    cookies_amount = int(cookies_text.split("cookie")[0])
 
-time.sleep(3)
-cookie = driver.find_element(By.ID, "bigCookie")
-# Get cookies amount
-cookies_amount = float(driver.find_element(By.ID, "cookies").text[0])
-# while True:
-#     cookie.click()
-#     for upgrade in upgrade_items:
-#         try:
-#             if cookies_amount > int(upgrade.text):
-#                 print(upgrade.text)
-#                 upgrade.click()
-#         except StaleElementReferenceException:
-#             continue
-
-
-
+    try:
+        cookie.click()
+    except StaleElementReferenceException:
+        cookie = driver.find_element(By.ID, "bigCookie")
+        cookie.click()
+    for product in product_store:
+        try:
+            # check if product is displayed on the page
+            if product.is_displayed():
+                product_price = product.find_element(By.CLASS_NAME, "price").text
+                print(cookies_amount)
+                # check if the user cookies is greater than the product price
+                if cookies_amount > float(product_price.replace(',', "")):
+                    product.click()
+        except StaleElementReferenceException:
+            pass

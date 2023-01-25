@@ -25,6 +25,7 @@ cookie = driver.find_element(By.ID, "bigCookie")
 time.sleep(3)
 
 
+
 def go_to_options():
     options = driver.find_element(By.ID, "prefsButton").find_element(By.CLASS_NAME, "subButton")
     options.click()
@@ -91,9 +92,11 @@ for i in range(19):
 
 product_store.reverse()
 upload_data()
-while True:
+
+def main():
     try:
         while True:
+            cookie = driver.find_element(By.ID, "bigCookie")
             cookie.click()
             cookies_text = driver.find_element(By.ID, "cookies").text.split("per second: ")[0]
             cookies_amount = float(convert_to_cookies_amount(cookies_text))
@@ -114,3 +117,13 @@ while True:
     except StaleElementReferenceException:
         cookie = driver.find_element(By.ID, "bigCookie")
         cookie.click()
+
+
+
+# while True:
+#     main()
+#
+
+upgrade_store = driver.find_element(By.ID,"upgrades").find_elements(By.ID, "*upgrade*")
+pp.pprint(upgrade_store)
+print(len(upgrade_store))

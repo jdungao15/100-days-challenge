@@ -1,11 +1,11 @@
 from selenium import webdriver
 from selenium.common import NoSuchElementException, StaleElementReferenceException, ElementClickInterceptedException
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import pprint as pp
+from gui import CookieUI
 
 timeout = time.time() + 10
 five_min = time.time() + 60 * 5  # 5minutes
@@ -25,7 +25,6 @@ cookie = driver.find_element(By.ID, "bigCookie")
 time.sleep(3)
 
 
-
 def go_to_options():
     options = driver.find_element(By.ID, "prefsButton").find_element(By.CLASS_NAME, "subButton")
     options.click()
@@ -34,6 +33,7 @@ def go_to_options():
 def save_file():
     go_to_options()
     export_save = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div[18]/div[2]/div[4]/div[3]/div/div[4]/a[1]")
+    ui.save(export_save)
     export_save.click()
     data = driver.find_element(By.ID, "textareaPrompt")
     with open("cookies_data.txt", "w") as f:
@@ -70,6 +70,7 @@ def convert_to_cookies_amount(c_amount):
 def upload_data():
     go_to_options()
     import_save = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div[18]/div[2]/div[4]/div[3]/div/div[4]/a[2]")
+    ui.save(import_save)
     import_save.click()
     text_area = driver.find_element(By.ID, "textareaPrompt")
     with open("cookies_data.txt", "r") as f:
@@ -93,6 +94,7 @@ for i in range(19):
 product_store.reverse()
 upload_data()
 
+
 def main():
     try:
         while True:
@@ -101,8 +103,8 @@ def main():
             cookies_text = driver.find_element(By.ID, "cookies").text.split("per second: ")[0]
             cookies_amount = float(convert_to_cookies_amount(cookies_text))
 
-            #Wait five seconds
-            if time.time()> timeout:
+            # Wait five seconds
+            if time.time() > timeout:
                 for product in product_store:
                     try:
                         # check if product is displayed on the page
@@ -119,11 +121,8 @@ def main():
         cookie.click()
 
 
-
 # while True:
 #     main()
 #
 
-upgrade_store = driver.find_element(By.ID,"upgrades").find_elements(By.ID, "*upgrade*")
-pp.pprint(upgrade_store)
-print(len(upgrade_store))
+ui = CookieUI()

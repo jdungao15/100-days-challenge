@@ -41,6 +41,3 @@ class CookieApp:
         self.stop_button.place(relx=0.8, rely=0.8, height=100, width=100)
 
         self.screen.mainloop()
-
-
-cookie = CookieApp()

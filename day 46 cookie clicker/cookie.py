@@ -56,7 +56,7 @@ class Cookie:
         if self.start_click:
             self.start_click = False
             self.save_file()
-            print("Save File")
+            print("start clicked false")
         else:
             self.go_to_options()
             time.sleep(2)
@@ -70,9 +70,8 @@ class Cookie:
                     f.write(data.text)
                 all_done_button = self.driver.find_element(By.ID, "promptOption0")
                 all_done_button.click()
-                time.sleep(1)
-                exit_button = self.driver.find_element(By.CLASS_NAME, "menuClose")
-                exit_button.click()
+                time.sleep(2)
+                self.go_to_options()
                 print(f"File Saved {time.ctime(time.time())}")
             except NoSuchElementException:
                 pass
@@ -81,7 +80,7 @@ class Cookie:
 
         cookie_currency = c_amount.replace("\n", "").replace("cookies", "")
         upgrade_currency = ["million", "billion", "trillion", "quadrillion", "quintillion", "sextillion",
-                            "septillion"]
+                            "septillion", "octillion", "nonillion", "decillion", "undecillion", "duodecillion", ]
 
         for c in upgrade_currency:
             if c in cookie_currency:
@@ -97,7 +96,7 @@ class Cookie:
 
     def has_same_units(self, product_v):
         upgrade_currency = ["million", "billion", "trillion", "quadrillion", "quintillion", "sextillion",
-                            "septillion"]
+                            "septillion", "octillion", "nonillion", "decillion", "undecillion", "duodecillion", ]
 
         user_cookies = self.driver.find_element(By.ID, "cookies").text.split("per second: ")[0]
         product_price = product_v.find_element(By.CLASS_NAME, "price").text
@@ -114,6 +113,11 @@ class Cookie:
         user_currency = cookies_text.replace("\n", "").replace("cookies", "")
         product_v = product_price.replace("\n", "").replace("cookies", "")
         units = {
+            "duodecillion": 12,
+            'undecillion': 11,
+            'decillion': 10,
+            'nonillion': 9,
+            "octillion": 8,
             "septillion": 7,
             "sextillion": 6,
             "quintillion": 5,
@@ -186,40 +190,40 @@ class Cookie:
             cookie = self.driver.find_element(By.ID, "bigCookie")
             cookie.click()
             # Wait 15 minutes
-            # if time.time() > self.every_three_minutes:
-            #     affordable_cookie = True
-            #     for product in self.product_store:
-            #
-            #         # check if product is displayed on the page
-            #         if product.get_attribute("class") == "product unlocked enabled" \
-            #                 and product.is_displayed() and product.is_enabled():
-            #             print(f"Available Product: {product.text}")
-            #
-            #             while affordable_cookie:
-            #                 # check if user cookies have the same units as the product ex billions, millions
-            #                 if self.has_same_units(product):
-            #                     # check if user has enough cookies to buy the product
-            #                     if self.get_cookies_amount() > self.get_product_price(product):
-            #                         try:
-            #                             product.click()
-            #                         except ElementClickInterceptedException:
-            #                             time.sleep(2)
-            #                     else:
-            #                         print(f"Not enough cookies for {product.text}")
-            #                         affordable_cookie = False
-            #                 else:
-            #                     # check if user has bigger units than the product ex billions, millions
-            #                     if self.user_has_bigger_units(product):
-            #                         try:
-            #                             product.click()
-            #                         except ElementClickInterceptedException:
-            #                             product.click()
-            #                     else:
-            #                         print(f"Not enough cookies for {product.text}")
-            #                         affordable_cookie = False
-            #
-            #     # add 10 seconds to 15 minutes
-            #     self.timeout = time.time() + 60 * 10
+            if time.time() > self.timeout:
+
+                for product in self.product_store:
+                    affordable_products = True
+                    # check if product is displayed on the page
+                    if product.get_attribute("class") == "product unlocked enabled" \
+                            and product.is_displayed() and product.is_enabled():
+                        print(f"Available Product: {product.text}")
+
+                        while affordable_products:
+                            # check if user cookies have the same units as the product ex billions, millions
+                            if self.has_same_units(product):
+                                # check if user has enough cookies to buy the product
+                                if self.get_cookies_amount() > self.get_product_price(product):
+                                    try:
+                                        product.click()
+                                    except ElementClickInterceptedException:
+                                        affordable_products = False
+                                else:
+                                    print(f"Not enough cookies for {product.text}")
+                                    affordable_products = False
+                            else:
+                                # check if user has bigger units than the product ex billions, millions
+                                if self.user_has_bigger_units(product):
+                                    try:
+                                        product.click()
+                                    except ElementClickInterceptedException:
+                                        affordable_products = False
+                                else:
+                                    print(f"Not enough cookies for {product.text}")
+                                    affordable_products = False
+
+                # add 10 seconds to 15 minutes
+                self.timeout = time.time() + 60 * 60
 
             try:
                 golden_cookie = self.driver.find_element(By.CLASS_NAME, "shimmer")
@@ -238,13 +242,14 @@ class Cookie:
 
             # Autosave every 5 minutes
             if time.time() > self.five_min:
-                self.five_min = time.time() + 60 * 5
+                self.five_min = time.time() + 60 * 30
                 self.save_file()
+                time.sleep(2)
                 self.start()
             # Upgrade tools every 3 minutes
-            elif time.time() > self.every_three_minutes:
-                self.every_three_minutes = time.time() + 60 * 3
-                self.upgrade_tool()
+            # elif time.time() > self.every_three_minutes:
+            #     self.every_three_minutes = time.time() + 60 * 3
+            #     self.upgrade_tool()
 
     def start(self):
         self.start_click = True

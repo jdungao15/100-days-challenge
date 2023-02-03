@@ -135,6 +135,12 @@ h3 {
 /*Pricing*/
 
 .pricing-column {
-    padding: 3% 4%;
+    padding: 3% 2%;
+
+}
+#pricing {
     text-align: center;
+}
+.card-container {
+    border-color: #fff;
 }

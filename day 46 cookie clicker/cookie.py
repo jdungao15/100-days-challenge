@@ -53,34 +53,32 @@ class Cookie:
         options.click()
 
     def save_file(self):
-        if self.start_click:
-            self.start_click = False
-            self.save_file()
-            print("start clicked false")
-        else:
-            self.go_to_options()
+        self.stop()
+        self.go_to_options()
+        time.sleep(2)
+        try:
+            export_save = self.driver.find_element(By.XPATH,
+                                                   "/html/body/div[2]/div[2]/div[18]/div[2]/"
+                                                   "div[4]/div[3]/div/div[4]/a[1]")
+            export_save.click()
+            data = self.driver.find_element(By.ID, "textareaPrompt")
+            with open("cookies_data.txt", "w") as f:
+                f.write(data.text)
+            all_done_button = self.driver.find_element(By.ID, "promptOption0")
+            all_done_button.click()
             time.sleep(2)
-            try:
-                export_save = self.driver.find_element(By.XPATH,
-                                                       "/html/body/div[2]/div[2]/div[18]/div[2]/"
-                                                       "div[4]/div[3]/div/div[4]/a[1]")
-                export_save.click()
-                data = self.driver.find_element(By.ID, "textareaPrompt")
-                with open("cookies_data.txt", "w") as f:
-                    f.write(data.text)
-                all_done_button = self.driver.find_element(By.ID, "promptOption0")
-                all_done_button.click()
-                time.sleep(2)
-                self.go_to_options()
-                print(f"File Saved {time.ctime(time.time())}")
-            except NoSuchElementException:
-                pass
+            self.go_to_options()
+            print(f"File Saved {time.ctime(time.time())}")
+            self.start()
+        except NoSuchElementException:
+            pass
 
     def convert_to_cookies_amount(self, c_amount):
 
         cookie_currency = c_amount.replace("\n", "").replace("cookies", "")
         upgrade_currency = ["million", "billion", "trillion", "quadrillion", "quintillion", "sextillion",
-                            "septillion", "octillion", "nonillion", "decillion", "undecillion", "duodecillion", ]
+                            "septillion", "octillion", "nonillion", "undecillion", "duodecillion", 'tredecillion',
+                            'quattuordecillion', "decillion"]
 
         for c in upgrade_currency:
             if c in cookie_currency:
@@ -96,7 +94,8 @@ class Cookie:
 
     def has_same_units(self, product_v):
         upgrade_currency = ["million", "billion", "trillion", "quadrillion", "quintillion", "sextillion",
-                            "septillion", "octillion", "nonillion", "decillion", "undecillion", "duodecillion", ]
+                            "septillion", "octillion", "nonillion", "undecillion", "duodecillion", 'tredecillion',
+                            'quattuordecillion', "decillion"]
 
         user_cookies = self.driver.find_element(By.ID, "cookies").text.split("per second: ")[0]
         product_price = product_v.find_element(By.CLASS_NAME, "price").text
@@ -106,6 +105,10 @@ class Cookie:
                 return True
         return False
 
+    def pop_wrinkler(self):
+        wrinkler = self.driver.execute_script("return document.querySelector('specialPopup')")
+        wrinkler.execute_script("arguments[0].click();", wrinkler)
+
     def user_has_bigger_units(self, product):
         cookies_text = self.driver.find_element(By.ID, "cookies").text.split("per second: ")[0]
         product_price = product.find_element(By.CLASS_NAME, "price").text
@@ -113,6 +116,8 @@ class Cookie:
         user_currency = cookies_text.replace("\n", "").replace("cookies", "")
         product_v = product_price.replace("\n", "").replace("cookies", "")
         units = {
+            'quattuordecillion': 14,
+            'tredecillion': 13,
             "duodecillion": 12,
             'undecillion': 11,
             'decillion': 10,
@@ -244,8 +249,6 @@ class Cookie:
             if time.time() > self.five_min:
                 self.five_min = time.time() + 60 * 30
                 self.save_file()
-                time.sleep(2)
-                self.start()
             # Upgrade tools every 3 minutes
             # elif time.time() > self.every_three_minutes:
             #     self.every_three_minutes = time.time() + 60 * 3

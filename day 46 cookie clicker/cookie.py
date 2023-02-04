@@ -78,7 +78,7 @@ class Cookie:
         cookie_currency = c_amount.replace("\n", "").replace("cookies", "")
         upgrade_currency = ["million", "billion", "trillion", "quadrillion", "quintillion", "sextillion",
                             "septillion", "octillion", "nonillion", "undecillion", "duodecillion", 'tredecillion',
-                            'quattuordecillion', "decillion"]
+                            'quattuordecillion', 'quindecillion', "decillion"]
 
         for c in upgrade_currency:
             if c in cookie_currency:
@@ -95,7 +95,7 @@ class Cookie:
     def has_same_units(self, product_v):
         upgrade_currency = ["million", "billion", "trillion", "quadrillion", "quintillion", "sextillion",
                             "septillion", "octillion", "nonillion", "undecillion", "duodecillion", 'tredecillion',
-                            'quattuordecillion', "decillion"]
+                            'quattuordecillion','quindecillion', "decillion"]
 
         user_cookies = self.driver.find_element(By.ID, "cookies").text.split("per second: ")[0]
         product_price = product_v.find_element(By.CLASS_NAME, "price").text
@@ -116,6 +116,7 @@ class Cookie:
         user_currency = cookies_text.replace("\n", "").replace("cookies", "")
         product_v = product_price.replace("\n", "").replace("cookies", "")
         units = {
+            'quindecillion': 15,
             'quattuordecillion': 14,
             'tredecillion': 13,
             "duodecillion": 12,
@@ -193,7 +194,7 @@ class Cookie:
     def main(self):
         while self.start_click:
             cookie = self.driver.find_element(By.ID, "bigCookie")
-            cookie.click()
+1               cookie.click()
             # Wait 15 minutes
             if time.time() > self.timeout:
 
@@ -246,9 +247,9 @@ class Cookie:
                 pass
 
             # Autosave every 5 minutes
-            if time.time() > self.five_min:
-                self.five_min = time.time() + 60 * 30
-                self.save_file()
+            # if time.time() > self.five_min:
+            #     self.five_min = time.time() + 60 * 30
+            #     self.save_file()
             # Upgrade tools every 3 minutes
             # elif time.time() > self.every_three_minutes:
             #     self.every_three_minutes = time.time() + 60 * 3

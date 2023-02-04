@@ -1,6 +1,8 @@
 
 #title {
     background-color: #ff4c68;
+    position:relative;
+    z-index:-1;
 }
 
 body {
@@ -8,7 +10,8 @@ body {
 }
 
 .container-fluid {
-    padding: 3% 15%;
+    padding: 3% 15% 7%;
+
 }
 
 h1 {
@@ -67,8 +70,10 @@ h3 {
 
 /*Title Image*/
 .title-image {
-    width: 60%;
+    width: 19%;
     transform: rotate(25deg);
+    position: absolute;
+    right: 23%;
 }
 
 .features-icons {
@@ -83,6 +88,9 @@ h3 {
 
 #features {
     text-align: center;
+    background-color: white;
+    position: relative;
+
 }
 
 #features h3 {

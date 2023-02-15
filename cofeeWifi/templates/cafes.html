@@ -1,0 +1,58 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}Restaurants{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <style>
+        .link-warning {
+            color: #FF951D;
+        }
+
+        .container {
+            background-color: #495057;
+            color: whitesmoke;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+
+                <h1>All Cafes</h1>
+
+                <table class="table">
+                    <thead>
+                    <th scope="col">Cafe Name</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Open</th>
+                    <th scope="col">Close</th>
+                    <th scope="col">Coffee</th>
+                    <th scope="col">Wi-fi</th>
+                    <th scope="col">Power</th>
+                    </thead>
+                    <tbody>
+                    {% for cafe in cafes %}
+                     <tr>
+                        {% for val in cafe.values() %}
+
+                            {% if 'https' in val %}
+                                <td><a class="link-warning" href="{{ val }}">Maps Link</a></td>
+                            {% else %}
+                                <td>{{ val }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                        </tbody>
+                    {% endfor %}
+                </table>
+
+                <p><a href="/" class="link-warning">Return to index page</a></p>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

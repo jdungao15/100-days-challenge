@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% from 'bootstrap5/form.html' import render_form_row %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+
+    <form method="POST" action="{{ url_for('add') }}">
+        {{ form.csrf_token() }}
+        {{ render_form_row([form.title, form.author, form.rating], form_type='horizontal') }}
+        {{ render_form_row([form.submit]) }}
+    </form>
+
+
+{% endblock %}

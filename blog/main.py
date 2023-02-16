@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect, url_for
-from flask_bootstrap import Bootstrap
+from flask import Flask, render_template, redirect, url_for, request
+from flask_bootstrap import Bootstrap4
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -7,20 +7,21 @@ from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditor, CKEditorField
 import datetime
 
-
-## Delete this code:
-# import requests
+#
+# ## Delete this code:
+# # import requests
 # posts = requests.get("https://api.npoint.io/43644ec4f0013682fc0d").json()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
-Bootstrap(app)
+bootstrap = Bootstrap4(app)
 
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
 
 ##CONFIGURE TABLE
 class BlogPost(db.Model):
@@ -52,7 +53,8 @@ def get_all_posts():
 @app.route("/post/<int:index>")
 def show_post(index):
     post = BlogPost.query.get(index)
-    return render_template("post.html", post=post)
+
+    return render_template("post.html", bg_img=post.img_url, post=post)
 
 
 @app.route("/about")
@@ -63,6 +65,7 @@ def about():
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
+
 
 @app.route("/new_post", methods=["GET", "POST"])
 def add_new_post():
@@ -80,23 +83,38 @@ def add_new_post():
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for('get_all_posts'))
-    return render_template("make-post.html", form = form)
+    return render_template("make-post.html", form=form)
 
-#Edit Post
-@app.route("/edit-post/<int:post_id>", methods=["PUT"])
+
+# Edit Post
+@app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
-    if request.method == "PUT":
-        data = request.get_json()
-        post.title = data["title"]
-        post.subtitle = data["subtitle"]
-        post.body = data["body"]
-        post.author = data["author"]
-        post.img_url = data["img_url"]
+
+    edit_form = CreatePostForm(
+        title=post.title,
+        subtitle=post.subtitle,
+        author=post.author,
+        img_url=post.img_url,
+        body=post.body
+
+    )
+    if edit_form.validate_on_submit():
+        post.title = edit_form.title.data
+        post.subtitle = edit_form.subtitle.data
+        post.author = edit_form.author.data
+        post.img_url = edit_form.img_url.data
+        post.body = edit_form.body.data
         db.session.commit()
-        return jsonify(response={"success": "Post updated successfully."}), 200
-    return jsonify(response={"error": "Something went wrong."}), 500
+        return redirect(url_for('show_post', index=post_id))
 
+    return render_template('post.html', bg_img=post.img_url, post=edit_form, isEdit=True)
 
+@app.route("/delete/<int:post_id>")
+def delete_post(post_id):
+    post = BlogPost.query.get(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('get_all_posts'))
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,9 +1,10 @@
-{% extends 'bootstrap/base.html' %}
-{% import 'bootstrap/wtf.html' as wtf %}
 
-{% block content %}
-    {% include "header.html" %}
+{% from 'bootstrap4/form.html' import render_form %}
+{% include 'header.html' %}
+
+
     <!-- Page Header -->
+{% block content %}
     <header class="masthead" style="background-image: url('{{ url_for('static', filename='img/edit-bg.jpg') }}')">
         <div class="overlay"></div>
         <div class="container">
@@ -25,11 +26,9 @@
                     {{ form.csrf_token()}}
                     {{ ckeditor.load() }}
                     {{ ckeditor.config(name='body') }}
-                    {{ wtf.quick_form(form,button_map={'submit':'primary'}) }}
+                    {{ render_form(form) }}
                 </form>
             </div>
         </div>
     </div>
-
-    {% include "footer.html" %}
 {% endblock %}
